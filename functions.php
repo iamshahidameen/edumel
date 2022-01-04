@@ -206,3 +206,13 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+/**
+ * Custom post types
+ */
+require get_template_directory() . '/inc/cpts.php';
+
+/**
+ * Custom taxonomies
+ */
+require get_template_directory() . '/inc/taxonomies.php';
