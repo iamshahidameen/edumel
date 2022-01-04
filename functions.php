@@ -7,9 +7,9 @@
  * @package Edumel
  */
 
-if ( ! defined( '_S_VERSION' ) ) {
+if ( ! defined( 'EDUMEL_VERSION' ) ) {
 	// Replace the version number of the theme on each release.
-	define( '_S_VERSION', '1.0.0' );
+	define( 'EDUMEL_VERSION', '1.0.0' );
 }
 
 if ( ! function_exists( 'edumel_setup' ) ) :
@@ -140,14 +140,43 @@ add_action( 'widgets_init', 'edumel_widgets_init' );
  * Enqueue scripts and styles.
  */
 function edumel_scripts() {
-	wp_enqueue_style( 'edumel-style', get_stylesheet_uri(), array(), _S_VERSION );
+	wp_enqueue_style( 'edumel-style', get_stylesheet_uri(), array(), EDUMEL_VERSION );
 	wp_style_add_data( 'edumel-style', 'rtl', 'replace' );
 
-	wp_enqueue_script( 'edumel-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+	wp_enqueue_script( 'edumel-navigation', get_template_directory_uri() . '/js/navigation.js', array(), EDUMEL_VERSION, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+    // Edumel CSS Files
+    wp_enqueue_style( 'edumel-bootstrap-style-library', get_template_directory_uri() . '/assets/vendors/bootstrap/bootstrap.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-fontawesome-style-library', get_template_directory_uri() . '/assets/vendors/awesome/css/fontawesome-all.min.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-flaticon-style-library', get_template_directory_uri() . '/assets/vendors/flaticon/flaticon.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-gilroy-style-library', get_template_directory_uri() . '/assets/fonts/gilroy/font-gilroy.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-magnific-style-library', get_template_directory_uri() . '/assets/vendors/magnific-popup/magnific-popup.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-animate-style-library', get_template_directory_uri() . '/assets/vendors/animate-css/animate.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-animated-headline-style-library', get_template_directory_uri() . '/assets/vendors/animated-headline/animated-headline.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-owl-carousel-style-library', get_template_directory_uri() . '/assets/vendors/owl/assets/owl.carousel.min.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-owl-theme-style-library', get_template_directory_uri() . '/assets/vendors/owl/assets/owl.theme.default.min.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-woocomerce-styles', get_template_directory_uri() . '/assets/css/woocomerce.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-main-styles', get_template_directory_uri() . '/assets/css/style.css', array(), EDUMEL_VERSION);
+    wp_enqueue_style( 'edumel-responsive-styles', get_template_directory_uri() . '/assets/css/responsive.css', array(), EDUMEL_VERSION);
+
+
+    // Edumel JavaScript Files
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'edumel-bootstrap-popper-js-libraray', get_template_directory_uri() . '/assets/vendors/bootstrap/popper.min.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-bootstrap-main-js-libraray', get_template_directory_uri() . '/assets/vendors/bootstrap/bootstrap.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-counterup-waypoint-js-libraray', get_template_directory_uri() . '/assets/vendors/counterup/waypoint.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-counterup-jquery-js-libraray', get_template_directory_uri() . '/assets/vendors/counterup/jquery.counterup.min.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-owl-js-libraray', get_template_directory_uri() . '/assets/vendors/owl/owl.carousel.min.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-isotope-jquery-js-libraray', get_template_directory_uri() . '/assets/vendors/isotope/jquery.isotope.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-isotope-imageloaded-js-libraray', get_template_directory_uri() . '/assets/vendors/isotope/imagelaoded.min.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-animated-js-libraray', get_template_directory_uri() . '/assets/vendors/animated-headline/animated-headline.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-magnific-js-libraray', get_template_directory_uri() . '/assets/vendors/magnific-popup/jquery.magnific-popup.min.js', array(), EDUMEL_VERSION, true );
+    wp_enqueue_script( 'edumel-main-scripts', get_template_directory_uri() . '/assets/js/script.js', array(), EDUMEL_VERSION, true );
+
 }
 add_action( 'wp_enqueue_scripts', 'edumel_scripts' );
 
@@ -177,4 +206,3 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
-

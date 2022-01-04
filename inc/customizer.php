@@ -56,6 +56,6 @@ function edumel_customize_partial_blogdescription() {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function edumel_customize_preview_js() {
-	wp_enqueue_script( 'edumel-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), _S_VERSION, true );
+	wp_enqueue_script( 'edumel-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), EDUMEL_VERSION, true );
 }
 add_action( 'customize_preview_init', 'edumel_customize_preview_js' );
