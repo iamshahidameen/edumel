@@ -172,20 +172,22 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12 col-xl-6 col-lg-6">
                 <div class="banner-content ">
-                    <span class="subheading"><?php the_field('hero_tagline'); ?></span>
+                    <span class="subheading"><?php the_field('hero_subheading'); ?></span>
                     <h1><?php the_field('hero_title'); ?></h1>
                     <p class="mb-40"> <?php the_field('hero_content'); ?></p>
 
                     <div class="btn-container">
-                        <a href="<?php the_field('hero_find_courses'); ?>" class="btn btn-main rounded">Find Courses</a>
-                        <a href="<?php the_field('hero_get_started'); ?>" class="btn btn-white rounded ms-2">Get started </a>
+                        <?php $hero_btn_1 = get_field('hero_find_courses_btn'); ?>
+                        <?php $hero_btn_2 = get_field('hero_get_started_btn'); ?>
+                        <a href="<?php echo $hero_btn_1['url']; ?>" class="btn btn-main rounded"><?php echo $hero_btn_1['title']; ?></a>
+                        <a href="<?php echo $hero_btn_2['url'] ?>" class="btn btn-white rounded ms-2"><?php echo $hero_btn_2['title']; ?> </a>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12 col-xl-6 col-lg-6">
                 <div class="banner-img-round mt-5 mt-lg-0 ps-5">
-                    <img src="<?php the_field('hero_image'); ?>" alt="" class="img-fluid">
+                    <?php $hero_image = get_field('hero_image');?>
+                    <img src="<?php echo $hero_image['url']; ?>" alt="<?php echo $hero_image['alt']; ?>" class="img-fluid">
                 </div>
             </div>
         </div> <!-- / .row -->
@@ -206,9 +208,11 @@
                                 <div class="col-lg-3 col-md-6">
                                     <div class="counter-item mb-5 mb-lg-0">
                                         <div class="count">
-                                            <span class="counter h2">
-                                                <?php echo $stat_item["stat_number"]; ?>;
-                                            </span>
+                                            <script> let myNum = parseInt(<?php echo $stat_item['stat_number']; ?>)
+                                            // document.write(myNum);
+                                            </script>
+
+                                            <span class="counter h2"><?php echo $stat_item['stat_number']; ?></span>
                                         </div>
                                         <p><?php echo $stat_item['stat_heading']; ?></p>
                                     </div>
@@ -249,7 +253,7 @@
                     <div class="course-grid bg-shadow tooltip-style">
                         <div class="course-header">
                             <div class="course-thumb">
-                                <img src="<?php the_post_thumbnail_url(); ?>" alt="" class="img-fluid">
+                                <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
                                 <div class="course-price">$<?php the_field('course_price'); ?></div>
                             </div>
                         </div>
@@ -276,11 +280,14 @@
 
                         <div class="course-hover-content">
                             <div class="price">$300</div>
-                            <h3 class="course-title mb-20 mt-30"> <a href="#"><?php the_title(); ?> </a> </h3>
+                            <h3 class="course-title mb-20 mt-30"> <a href="<?php the_permalink(); ?>"><?php the_title(); ?> </a> </h3>
                             <div class="course-meta d-flex align-items-center mb-20">
                                 <div class="author me-4">
-                                    <img src="assets/images/course/course-2.jpg" alt="" class="img-fluid">
-                                    <a href="#"><?php the_field('course_author'); ?></a>
+                                    <?php $authors = get_field('course_author'); ?>
+                                        <?php foreach($authors as $author){ ?>
+                                            <img src="<?php echo get_the_post_thumbnail_url($author->ID); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
+                                            <a href="<?php echo $author->guid; ?>"><?php echo $author->post_title; ?></a>
+                                        <?php } ?>
                                 </div>
                                 <span class="lesson"> <i class="far fa-file-alt"></i> <?php the_field('course_lessons'); ?> lessons</span>
                             </div>
@@ -303,42 +310,28 @@
         <div class="row mb-70 justify-content-center">
             <div class="col-xl-8">
                 <div class="section-heading text-center">
-                    <h2 class="font-lg">Categories you want to learn</h2>
-                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam</p>
+                    <h2 class="font-lg"><?php the_field('stats_title'); ?></h2>
+                    <p><?php the_field('stats_content'); ?></p>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <?php
-            $cat_items = 0;
-            $loop = new WP_Query( array( 'post_type' => 'course', 'posts_per_page' => '1' ) );
-
-            if ( $loop->have_posts() ) :
-                while ( $loop->have_posts() ) : $loop->the_post();
-                    $terms = get_terms([
-                        'taxonomy' => 'coursecategory',
-                        'hide_empty' => false,
-                    ]);
-
-                    foreach ( $terms as $term ) {
-                        $cat_items++; ?>
-                        <div class="col-xl col-lg-4 col-sm-6">
-                            <div class="single-course-category style-3 bg-<?php echo $cat_items ?>">
-                                <div class="course-cat-icon">
-                                    <img src="assets/images/icon/icon1.png" alt="" class="img-fluid">
-                                </div>
-                                <div class="course-cat-content">
-                                    <h4 class="course-cat-title"><a href="#"><?php echo $term->name; ?></a></h4>
-                                </div>
-                            </div>
+            $terms = get_terms([
+                'taxonomy' => 'coursecategory'
+            ]);
+            foreach ( $terms as $term ) : ?>
+                <div class="col-xl col-lg-4 col-sm-6">
+                    <div class="single-course-category style-3 <?php the_field('course_category_color_class', 'coursecategory_' . $term->term_id); ?>">
+                        <div class="course-cat-icon">
+                            <img src="<?php the_field('course_category_image', 'coursecategory_' . $term->term_id); ?>" alt="" class="img-fluid">
                         </div>
-                        <?php
-                    }
-                endwhile;
-                wp_reset_query();
-            endif;
-            ?>
+                        <div class="course-cat-content">
+                            <h4 class="course-cat-title"><a href="<?php echo home_url(); ?>/coursecategory/<?php echo $term->slug; ?> "><?php echo $term->name; ?> </a></h4>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -350,8 +343,8 @@
         <div class="row mb-40">
             <div class="col-xl-8">
                 <div class="section-heading ">
-                    <h2 class="font-lg">Start your journey With us</h2>
-                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam</p>
+                    <h2 class="font-lg"><?php the_field('journey_heading'); ?></h2>
+                    <p><?php the_field('journey_tagline'); ?></p>
                 </div>
             </div>
         </div>
@@ -360,13 +353,11 @@
                 <div class="row">
                     <?php
                     $journey_field = get_field('journey_group');
-                    $journey_count = 0;
                     foreach( $journey_field as $journey_array){
-                        foreach ($journey_array as $journey_features){
-                            $journey_count++; ?>
+                        foreach ($journey_array as $journey_features){ ?>
                             <div class="col-xl-6 col-lg-6 col-md-6">
                                 <div class="step-item ">
-                                    <div class="step-number bg-<?php echo  $journey_count; ?>">0<?php echo  $journey_count; ?></div>
+                                    <div class="step-number <?php echo $journey_features['color_class']; ?>"><?php echo $journey_features['feature_item_number'];  ?></div>
                                     <div class="step-text">
                                         <h5><?php echo $journey_features['title']; ?></h5>
                                         <p><?php echo $journey_features['description']; ?></p>
@@ -380,10 +371,11 @@
             </div>
 
             <div class="col-xl-5">
-                <div class="video-section mt-3 mt-xl-0">
+                <div class="video-sectionn mt-3 mt-xl-0">
                     <div class="video-content">
-                        <img src="assets/images/bg/office01.jpg" alt="" class="img-fluid">
-                        <a href="#" class="video-icon video-popup"><i class="fa fa-play"></i></a>
+                        <?php the_field('journey_video'); ?>
+<!--                        <img src="assets/images/bg/office01.jpg" alt="" class="img-fluid">-->
+<!--                        <a href="#" class="video-icon video-popup"><i class="fa fa-play"></i></a>-->
                     </div>
                 </div>
             </div>
@@ -454,26 +446,26 @@
         <div class="row justify-content-center">
             <div class="col-xl-8">
                 <div class="section-heading mb-50 text-center">
-                    <h2 class="font-lg"><?php the_field('transform_heading');?></h2>
-                    <p><?php the_field('transform_description');?></p>
+                    <h2 class="font-lg"><?php the_field('features_heading');?></h2>
+                    <p><?php the_field('features_description');?></p>
                 </div>
             </div>
         </div>
         <div class="row ">
 
             <?php
-            $transform_items = get_field('transform_item');
-            if($transform_items) {
-                foreach($transform_items as $trasnform_item) {
+            $transform_group = get_field('features_group');
+            if($transform_group) {
+                foreach($transform_group as $trasnform_item) {
                     foreach($trasnform_item as $transform_data) { ?>
                         <div class="col-lg-3 col-md-6 col-xl-3 col-sm-6">
                             <div class="feature-item feature-style-top hover-shadow rounded border-0">
                                 <div class="feature-icon">
-                                    <i class="flaticon-<?php echo $transform_data['transform_icon']; ?>>"></i>
+                                    <i class="<?php echo $transform_data['icon']; ?>"></i>
                                 </div>
                                 <div class="feature-text">
-                                    <h4><?php echo $transform_data['transform_title']; ?></h4>
-                                    <p><?php echo $transform_data['transform_description']; ?></p>
+                                    <h4><?php echo $transform_data['title']; ?></h4>
+                                    <p><?php echo $transform_data['description']; ?></p>
                                 </div>
                             </div>
                         </div>
@@ -532,8 +524,8 @@
                             </div>
 
                             <div class="course-meta">
-                                <span class="duration"><i class="far fa-user-alt"></i><?php the_field('total_students'); ?> Students</span>
-                                <span class="lessons"><i class="far fa-play-circle me-2"></i><?php the_field('courses_teach'); ?> Course</span>
+                                <span class="duration"><i class="far fa-user-alt"></i><?php the_field('instructors_total_students'); ?> Students</span>
+                                <span class="lessons"><i class="far fa-play-circle me-2"></i><?php the_field('instructors_total_courses'); ?> Course</span>
                             </div>
                         </div>
                     </div>
@@ -551,8 +543,8 @@
         <div class="row justify-content-center">
             <div class="col-xl-6">
                 <div class="section-heading text-center mb-50">
-                    <h2 class="font-lg">Our Students Says</h2>
-                    <p>Discover Your Perfect Program In Our Courses.</p>
+                    <h2 class="font-lg"><?php the_field('testimonials_heading'); ?></h2>
+                    <p><?php the_field('testimonials_tagline'); ?></p>
                 </div>
             </div>
         </div>
@@ -567,7 +559,6 @@
                         'order' => 'ASC',
                     );
                     $loop= new WP_Query( $args );
-                    the_permalink();
                     while ( $loop->have_posts() ) : $loop->the_post(); ?>
                         <div class="testimonial-item">
                             <div class="testimonial-inner">
@@ -579,11 +570,11 @@
 
                                 <div class="client-info d-flex align-items-center">
                                     <div class="client-img">
-                                        <img src="<?php the_post_thumbnail_url(); ?>" alt="" class="img-fluid">
+                                        <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
                                     </div>
                                     <div class="testimonial-author">
                                         <h4><?php the_title(); ?></h4>
-                                        <span class="meta"><?php the_field('student_expertise'); ?></span>
+                                        <span class="meta"><?php the_field('testimonials_experties'); ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -606,14 +597,16 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-xl-4 col-lg-5">
                             <div class="cta-img mb-4 mb-lg-0">
-                                <img src="<?php the_field('cta_image'); ?>" alt="" class="img-fluid">
+                                <?php $cta_image = get_field('cta_image'); ?>
+                                <img src="<?php echo $cta_image['url']; ?>" alt="<?php echo $cta_image['alt']; ?>" class="img-fluid">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6">
                             <div class="cta-content ps-lg-4">
                                 <span class="subheading mb-10"><?php the_field('cta_tagline'); ?></span>
-                                <h2 class="mb-20"> <?php the_field('cta_title'); ?></h2>
-                                <a href="<?php the_field('cta_button_link'); ?>" class="btn btn-main rounded"> <?php the_field('cta_button_text'); ?></a>
+                                <h2 class="mb-20"> <?php the_field('cta_heading'); ?></h2>
+                                <?php $cta_link = get_field('cta_link'); ?>
+                                <a href="<?php echo $cta_link['url']; ?>" class="btn btn-main rounded"> <?php echo $cta_link['title']; ?></a>
                             </div>
                         </div>
                     </div>

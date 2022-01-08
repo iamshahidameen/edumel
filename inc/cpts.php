@@ -37,7 +37,7 @@ function create_course_cpt() {
         'description' => __( 'Perfect Programs in Edumel', 'edumel' ),
         'labels' => $labels,
         'menu_icon' => 'dashicons-book-alt',
-        'supports' => array('title', 'excerpt', 'thumbnail'),
+        'supports' => array('title', 'excerpt', 'thumbnail', 'editor'),
         'taxonomies' => array(),
         'public' => true,
         'show_ui' => true,

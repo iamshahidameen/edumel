@@ -216,3 +216,15 @@ require get_template_directory() . '/inc/cpts.php';
  * Custom taxonomies
  */
 require get_template_directory() . '/inc/taxonomies.php';
+/**
+ * Function which Get's The Post Thumbnail Alt Text
+ */
+function get_the_post_thumbnail_alt($post_id) {
+    return get_post_meta(get_post_thumbnail_id($post_id), '_wp_attachment_image_alt', true);
+}
+
+function the_post_thumbnail_alt($post_id) {
+    echo get_the_post_thumbnail_alt($post_id);
+}
+
+$custom_post_ID = get_the_ID(); ?>
