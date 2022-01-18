@@ -19,7 +19,6 @@
 </head>
 
 <body id="top-header">
-
 <header class="header-style-1">
     <div class="header-topbar topbar-style-2">
         <div class="container">
@@ -28,11 +27,11 @@
                     <div class="header-contact text-center text-lg-start d-none d-sm-block">
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <span class="text-color me-2"><i class="fa fa-phone-alt"></i></span><a href="tel:+(354) 6800 37849"> +(354) 6800 37849</a>
+                                <span class="text-color me-2"><i class="fa fa-phone-alt"></i></span><a href="tel:<?php echo get_theme_mod( 'contact_info_setting' );?>"><?php echo get_theme_mod( 'contact_info_setting' );?></a>
                             </li>
 
                             <li class="list-inline-item">
-                                <span class="text-color me-2"><i class="fa fa-envelope"></i></span><a href="malito:hello@edumel.com"> hello@edumel.com</a>
+                                <span class="text-color me-2"><i class="fa fa-envelope"></i></span><a href="malito:<?php echo get_theme_mod( 'email_info_setting' );?>"> <?php echo get_theme_mod( 'email_info_setting' );?></a>
                             </li>
                         </ul>
                     </div>
@@ -42,11 +41,11 @@
                     <div class="d-sm-flex justify-content-center justify-content-lg-end">
                         <div class="header-socials text-center text-lg-end">
                             <ul class="list-inline">
-                                <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fab fa-youtube"></i></a></li>
+                                <li class="list-inline-item"><a href="<?php echo get_theme_mod( 'social_fb_setting' );?>"><i class="fab fa-facebook-f"></i></a></li>
+                                <li class="list-inline-item"><a href="<?php echo get_theme_mod( 'social_tw_setting' );?>"><i class="fab fa-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="<?php echo get_theme_mod( 'social_in_setting' );?>"><i class="fab fa-linkedin-in"></i></a></li>
+                                <li class="list-inline-item"><a href="<?php echo get_theme_mod( 'social_pt_setting' );?>"><i class="fab fa-pinterest"></i></a></li>
+                                <li class="list-inline-item"><a href="<?php echo get_theme_mod( 'social_yt_setting' );?>"><i class="fab fa-youtube"></i></a></li>
                             </ul>
                         </div>
 
@@ -64,7 +63,7 @@
             <div class="d-flex align-items-center justify-content-between">
                 <div class="site-logo">
                     <a href="index.html">
-                        <img src="assets/images/logo.png" alt="" class="img-fluid" />
+                        <?php the_custom_logo(get_theme_mod( 'custom_logo' ));?>
                     </a>
                 </div>
 
@@ -202,7 +201,7 @@
             <div class="col-xl-12 counter-inner">
                 <div class="row">
                     <?php $stats_group = get_field('stats_group'); ?>
-                    <?php if($stats_group) {
+                    <?php if($stats_group) { 
                         foreach ($stats_group as $stat_repeater) {
                             foreach ($stat_repeater as $stat_item) { ?>
                                 <div class="col-lg-3 col-md-6">
@@ -240,65 +239,7 @@
         </div>
 
         <div class="row justify-content-lg-center">
-            <?php
-            $args = array(
-                'post_type' => 'course',
-                'posts_per_page' => 3,
-                'orderby' => 'title',
-                'order' => 'ASC',
-            );
-            $courses_loop= new WP_Query( $args );
-            while ( $courses_loop->have_posts() ) : $courses_loop->the_post(); ?>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="course-grid bg-shadow tooltip-style">
-                        <div class="course-header">
-                            <div class="course-thumb">
-                                <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
-                                <div class="course-price">$<?php the_field('course_price'); ?></div>
-                            </div>
-                        </div>
-
-                        <div class="course-content">
-                            <div class="rating mb-10">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-
-                                <span><?php the_field('course_ratings'); ?></span>
-                            </div>
-
-                            <h3 class="course-title mb-20"> <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a> </h3>
-
-                            <div class="course-footer mt-20 d-flex align-items-center justify-content-between ">
-                                <span class="duration"><i class="far fa-clock me-2"></i><?php the_field('course_duration'); ?> hr</span>
-                                <span class="students"><i class="far fa-user-alt me-2"></i><?php the_field('course_students'); ?> Students</span>
-                                <span class="lessons"><i class="far fa-play-circle me-2"></i><?php the_field('course_lessons'); ?> Lessons</span>
-                            </div>
-                        </div>
-
-                        <div class="course-hover-content">
-                            <div class="price">$300</div>
-                            <h3 class="course-title mb-20 mt-30"> <a href="<?php the_permalink(); ?>"><?php the_title(); ?> </a> </h3>
-                            <div class="course-meta d-flex align-items-center mb-20">
-                                <div class="author me-4">
-                                    <?php $authors = get_field('course_author'); ?>
-                                        <?php foreach($authors as $author){ ?>
-                                            <img src="<?php echo get_the_post_thumbnail_url($author->ID); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
-                                            <a href="<?php echo $author->guid; ?>"><?php echo $author->post_title; ?></a>
-                                        <?php } ?>
-                                </div>
-                                <span class="lesson"> <i class="far fa-file-alt"></i> <?php the_field('course_lessons'); ?> lessons</span>
-                            </div>
-                            <p class="mb-20"><?php the_excerpt(); ?></p>
-                            <a href="<?php the_permalink(); ?>" class="btn btn-grey btn-sm rounded">Join Now <i class="fal fa-angle-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-            <?php endwhile; ?>
-            <?php wp_reset_query(); ?>
+            <?php echo do_shortcode('[show_courses posts_per_page="4"]'); ?>
         </div>
     </div>
 </section>
@@ -625,18 +566,17 @@
                 <div class="col-xl-3 col-sm-8 me-auto">
                     <div class="widget footer-widget mb-5 mb-lg-0">
                         <div class="footer-logo">
-                            <img src="assets/images/logo-white.png" alt="" class="img-fluid">
+                            <img src="<?php echo get_theme_mod( 'footer_logo' );?>" alt="Footer Edumel logo" class="img-fluid">
                         </div>
 
-                        <p class="mt-4">Edumel is a Bootstrap Template for online courses
-                            education websites support multiple courses</p>
+                        <p class="mt-4"><?php echo get_option('blogdescription'); ?></p>
 
                         <div class="footer-socials mt-5">
                             <span class="me-2">Connect :</span>
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                            <a href="<?php echo get_theme_mod( 'social_fb_setting' );?>"><i class="fab fa-facebook-f"></i></a>
+                            <a href="<?php echo get_theme_mod( 'social_tw_setting' );?>"><i class="fab fa-twitter"></i></a>
+                            <a href="<?php echo get_theme_mod( 'social_in_setting' );?>"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="<?php echo get_theme_mod( 'social_pt_setting' );?>"><i class="fab fa-pinterest"></i></a>
                         </div>
                     </div>
                 </div>
@@ -681,9 +621,9 @@
                     <div class="footer-widget mb-5 mb-lg-0">
                         <h5 class="widget-title">Address</h5>
                         <ul class="list-unstyled footer-links">
-                            <li><a href="#">+0800 327 8534</a></li>
-                            <li><a href="#">support@edumel.com</a></li>
-                            <li><a href="#">123 Fifth Floor East 26th Street,New York, NY 10011</a></li>
+                            <li><a href="tel:<?php echo get_theme_mod( 'contact_info_setting' );?>"><?php echo get_theme_mod( 'contact_info_setting' );?></a></li>
+                            <li><a href="mailto:<?php echo get_theme_mod( 'email_info_setting' );?>"><?php echo get_theme_mod( 'email_info_setting' );?></a></li>
+                            <li><a href="#"><?php echo get_theme_mod( 'address_info_setting' );?></a></li>
                         </ul>
                     </div>
                 </div>
@@ -695,7 +635,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-xl-6 col-sm-12 col-lg-6">
-                    <p class="mb-0 copyright text-sm-center text-lg-start">© 2021 Edumel All rights reserved by <a href="https://themeturn.com" rel="nofollow">Dreambuzz</a> </p>
+                    <p class="mb-0 copyright text-sm-center text-lg-start"><?php echo get_theme_mod( 'copyright_text_setting' );?> <a href="<?php home_url(); ?>" rel="nofollow"><?php echo get_theme_mod( 'company_name_setting' );?></a> </p>
                 </div>
 
                 <div class="col-xl-6 col-sm-12 col-lg-6">
