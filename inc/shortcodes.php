@@ -20,7 +20,7 @@ function courses_cb( $atts ){
                 <div class="course-header">
                     <div class="course-thumb">
                         <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" class="img-fluid">
-                        <div class="course-price">$<?php the_field('course_price'); ?></div>
+                        <div class="course-price">$<?php the_field('course_current_price'); ?></div>
                     </div>
                 </div>
 

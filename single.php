@@ -8,20 +8,23 @@
  */
 ?>
 <? get_header(); ?>
-
-
+<?php the_content(); ?>
 <section class="course-page-header  page-header-3">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-xl-8">
               <div class="course-header-wrapper mb-0 bg-transparent">
                   <h1 class="mb-3"><?php the_title(); ?></h1>
-                  <?php the_content(); ?>
+                  <?php the_excerpt(); ?>
                     <div class="course-header-meta">
                         <ul class="inline-list list-info">
                             <li>
                                 <div class="course-author">
-                                    <img src="assets/images/course/course-author.png" alt="#" >Madge Alvarez
+									<?php $authors = get_field('course_author'); ?>
+									<?php foreach($authors as $author){ ?>
+										<img src="<?php echo get_the_post_thumbnail_url($author->ID); ?>" alt="<?php the_post_thumbnail_alt($custom_post_ID); ?>" >
+										<?php echo $author->post_title; ?>
+                                <?php } ?>
                                 </div>
                             </li>
 
@@ -32,10 +35,10 @@
                                   <span><i class="fas fa-star"></i></span>
                                   <span><i class="fas fa-star"></i></span>
                                   <span><i class="fas fa-star"></i></span>
-                                    <span class="rating-count">(19)</span>
+                                    <span class="rating-count"><?php the_field('course_ratings'); ?></span>
                                 </div>
                             </li>
-                            <li><i class="fa fa-user me-2"></i>11 enrolled students</li>
+                            <li><i class="fa fa-user me-2"></i><?php the_field('course_students'); ?>  enrolled students</li>
                         </ul>
                     </div>
               </div>
@@ -88,113 +91,54 @@
                 <div class="tutori-course-curriculum" >
     <div class="curriculum-scrollable">
         <ul class="curriculum-sections">
-            <li class="section">
+		<?php  $curriculum_data_array = get_field('curriculum_main_group');?>
+		<?php if($curriculum_data_array != ''){ ?> 
+		<?php 
+			foreach($curriculum_data_array as $curriculum_main_sections ) {
+				foreach($curriculum_main_sections as $curriculum_section) {
+		?>
+			<li class="section">
                 <div class="section-header">
                     <div class="section-left">
-                        <h5 class="section-title">Change simplification</h5>
-                        <p class="section-desc">Dacere agemusque constantius concessis elit videmusne quia stoici constructio dissimillimas audiunt homerus commendationes</p>
+                        <h5 class="section-title"><?php echo $curriculum_section['curriculum_heading'];?></h5>
+                        <p class="section-desc"><?php echo $curriculum_section['curriculum_details'];?></p>
                     </div>
                 </div>
   
                 <ul class="section-content">
-                    <li class="course-item has-status course-item-lp_lesson">
-                      <a class="section-item-link" href="#">
-                        <span class="item-name">The importance of data nowsaday</span>
-                        <div class="course-item-meta">
-                          <span class="item-meta duration">10.30 min</span>
-                          <i class="item-meta course-item-status"></i>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li class="course-item has-status course-item-lp_lesson">
-                        <a class="section-item-link" href="#">
-                            <span class="item-name">Why my organization should know about data</span>
-                            <div class="course-item-meta">
-                            <span class="item-meta duration">20.30 min</span>
-                            <i class="item-meta course-item-status" ></i>
-                            </div>
-                        </a>
-                    </li>
-
-                    <li class="course-item course-item-lp_assignment course-item-lp_lesson">
-                        <a class="section-item-link" href="#">
-                             <span class="item-name">Assignments</span>
-                             <div class="course-item-meta">
-         
-                                 <span class="item-meta count-questions">14 questions</span>
-                                 <span class="item-meta duration">10.21 min</span><i class="fa item-meta course-item-status trans"></i>
-                             </div>
-                         </a>
-                     </li>
-                    <li class="course-item course-item-lp_quiz course-item-lp_lesson">
-                       <a class="section-item-link" href="#">
-                            <span class="item-name">Quiz 1</span>
-                            <div class="course-item-meta">
-        
-                                <span class="item-meta count-questions">14 questions</span>
-                                <span class="item-meta duration">5.67 min</span><i class="fa item-meta course-item-status trans"></i>
-                            </div>
-                        </a>
-                    </li>
+						<?php  $curriculum_row_group = $curriculum_section['curriculum_row_group'];?>
+						<?php if($curriculum_row_repeater != '' ){ ?>
+						<?php 
+							//print_r($curriculum_row_group);
+							foreach($curriculum_row_group as $curriculum_row_repeater ) {
+								foreach($curriculum_row_repeater as $curriculum_row) {
+						?>
+								<li class="course-item course-item-lp_<?php echo $curriculum_row['curriculum_type'];?>">
+									<a class="section-item-link" href="#">
+										<span class="item-name"><?php echo $curriculum_row['curriculum_row_title']; ?></span>
+										<div class="course-item-meta">
+										<?php if($curriculum_row['curriculum_questions'] != ''){ ?> <span class="item-meta count-questions"><?php echo $curriculum_row['curriculum_questions']; ?></span> <?php }; ?>
+										<?php if($curriculum_row['curriculum_lesson_duration'] != ''){ ?> 	<span class="item-meta duration"><?php echo $curriculum_row['curriculum_lesson_duration']; ?></span><i class="fa item-meta course-item-status trans"></i><?php }; ?>
+										</div>
+									</a>
+								</li>
+						<?php
+								}
+							} 
+						?>
+					<?php }?>
+                    
                 </ul>
             </li>
             <!-- section end -->
-            <li class="section">
-              <div class="section-header">
-                <div class="section-left">
-                      <h5 class="section-title">Key concepts </h5>
-                      <p class="section-desc">Dacere agemusque constantius concessis elit videmusne quia stoici constructio dissimillimas audiunt homerus commendationes</p>
-                </div>
-              </div>
-  
-                <ul class="section-content">
-                    <li class="course-item has-status course-item-lp_lesson">
-                      <a class="section-item-link" href="#">
-                        <span class="item-name">Basic understanding of data management concepts</span>
-                        <div class="course-item-meta">
-                          <span class="item-meta duration">10 min</span>
-                          <i class="item-meta course-item-status"></i>
-                        </div>
-                      </a>
-                  </li>
-              </ul>
-            </li>
-            <!-- section end -->    
-            <li class="section">
-                <ul class="section-content">
-                    <li class="course-item has-status course-item-lp_lesson">
-                        <a class="section-item-link" href="#">
-                            <span class="item-name">Apply the principles </span>
-                            <div class="course-item-meta">
-                                <span class="item-meta duration">10 min</span>
-                                <i class="item-meta course-item-status"></i>
-                            </div>
-                        </a>
-                    </li>
+			<?php
+			}
+		}
+	?>
+<?php }; ?>
+            
 
-                    <li class="course-item has-status course-item-lp_lesson">
-                        <a class="section-item-link" href="#">
-                            <span class="item-name">Lesson 2</span>
-                            <div class="course-item-meta">
-                                <span class="item-meta duration">20 min</span>
-                                <i class="item-meta course-item-status"></i>
-                            </div>
-                        </a>
-                    </li>
 
-                    <li class="course-item has-status course-item-lp_lesson">
-                        <a class="section-item-link" href="#">
-                            <span class="item-name">Lesson 3</span>
-                            <div class="course-item-meta">
-                                <span class="item-meta duration">5 min</span>
-                                <i class="item-meta course-item-status"></i>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <!-- section end -->
         </ul>
         <!-- Main ul end -->
     </div>
@@ -272,8 +216,8 @@
 
             <div class="course-sidebar-details">
                 <div class="price-header">
-                    <h2 class="course-price">$120.00 <span>$150</span></h2>
-                    <span class="course-price-badge onsale">39% off</span>
+                    <h2 class="course-price">$<?php the_field('course_current_price'); ?> <span>$<?php the_field('course_regular_price'); ?></span></h2>
+                    <span class="course-price-badge onsale"><?php echo 100 - floor(get_field('course_current_price') / get_field('course_regular_price') * 100); ?>  % off</span>
                 </div>
                 <ul class="course-sidebar-list">
                     <li>
